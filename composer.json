@@ -1,0 +1,25 @@
+{
+    "name": "benjamin-chen/table-activity-record",
+    "description": "table action record for lumen framework",
+    "authors": [
+        {
+            "name": "benjamin",
+            "email": "benjaminchen.c@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "BenjaminChen\\TableActivityRecord\\": "src"
+        }
+    },
+    "require": {
+        "php": ">=7.1.3",
+        "laravel/lumen-framework": "5.7.*",
+        "influxdb/influxdb-php": "^1.14"
+    },
+    "license": "MIT",
+    "require-dev": {
+        "phpunit/phpunit": "^7.5",
+        "vlucas/phpdotenv": "^2.5"
+    }
+}

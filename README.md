@@ -32,11 +32,11 @@ INFLUXDB_DATABASE=your-influx-db-database
 Add operate logging channel
 ```
 'channels' => [
-        'operate' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/operate/operate.log'),
-        ]
-    ],
+    'operate' => [
+        'driver' => 'daily',
+        'path' => storage_path('logs/operate/operate.log'),
+    ]
+],
 ```
 
 ## Usage

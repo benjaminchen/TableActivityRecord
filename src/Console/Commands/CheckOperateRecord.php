@@ -32,7 +32,8 @@ class CheckOperateRecord extends Command
     {
         $db = app('InfluxDB\Database');
         $today = date("Y-m-d");
-        $handle = fopen(\base_path("storage/logs/operate/operate-$today.log"), "r");
+        $path = preg_replace('/(\w+?)\.log/', "$1-$today.log", config('logging.channels.operate.path'));
+        $handle = fopen($path, "r");
 
         $this->warn('check start');
 

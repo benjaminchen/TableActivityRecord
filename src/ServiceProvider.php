@@ -30,9 +30,6 @@ class ServiceProvider extends BaseProvider
         $this->app->register(Providers\AppServiceProvider::class);
         $this->app->register(Providers\EventServiceProvider::class);
 
-        $configPath = __DIR__.'/../config/logging.php';
-        $this->mergeConfigFrom($configPath, 'logging');
-
         $this->app->singleton(Database::class, function ($app) {
             $client = new Client(env('INFLUXDB_HOST'), env('INFLUXDB_PORT'));
             return $client->selectDB(env('INFLUXDB_DATABASE'));

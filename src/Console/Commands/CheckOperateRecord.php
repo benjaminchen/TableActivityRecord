@@ -33,6 +33,14 @@ class CheckOperateRecord extends Command
         $db = app('InfluxDB\Database');
         $today = date("Y-m-d");
         $path = preg_replace('/(\w+?)\.log/', "$1-$today.log", config('logging.channels.operate.path'));
+
+        if (!file_exists($path)) {
+            $explode = explode("/", $path);
+            $filename = end($explode);
+            $this->warn("Log file [$filename] don't exist!");
+            return;
+        }
+
         $handle = fopen($path, "r");
 
         $this->warn('check start');

@@ -14,14 +14,14 @@ class CheckOperateRecord extends Command
      *
      * @var string
      */
-    protected $signature = 'operateRecord:check';
+    protected $signature = 'operateRecord:check {date?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Check Operate Record';
+    protected $description = 'Check Operate Record. date formate: YYYY-MM-DD';
 
     /**
      * Execute the console command.
@@ -31,8 +31,8 @@ class CheckOperateRecord extends Command
     public function handle()
     {
         $db = app('InfluxDB\Database');
-        $today = date("Y-m-d");
-        $path = preg_replace('/(\w+?)\.log/', "$1-$today.log", config('logging.channels.operate.path'));
+        $date = empty($this->argument('date')) ? date("Y-m-d") : $this->argument('date');
+        $path = preg_replace('/(\w+?)\.log/', "$1-$date.log", config('logging.channels.operate.path'));
 
         if (!file_exists($path)) {
             $explode = explode("/", $path);
@@ -53,6 +53,7 @@ class CheckOperateRecord extends Command
             $queryArr = [];
 
             foreach ($data['tags'] as $key => $val) {
+                if ($val == '') continue;
                 $queryArr[] = "$key = '$val'";
             }
 
@@ -81,13 +82,15 @@ class CheckOperateRecord extends Command
             }
 
             $splitTime = str_split($time, 10);
+            $trim = trim($splitTime[1], '0');
 
             // note: date timezone set for influxdb
             date_default_timezone_set("utc");
 
-            $timeFormat = date("Y-m-d\Th:i:s", $splitTime[0]).".$splitTime[1]Z";
-            if (count(array_diff($data['tags']+$data['data']+['time' => $timeFormat], $result[0])) !== 0) {
-                $this->error("$selectString data didn't match");
+            $timeFormat = date("Y-m-d\Th:i:s", $splitTime[0]).".{$trim}Z";
+            $diff = array_diff($data['tags']+$data['data']+['time' => $timeFormat], $result[0]);
+            if (count($diff) !== 0) {
+                $this->error("$selectString data didn't match --> ".json_encode($diff));
                 continue;
             }
 

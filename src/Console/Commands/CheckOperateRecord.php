@@ -82,7 +82,7 @@ class CheckOperateRecord extends Command
             }
 
             $splitTime = str_split($time, 10);
-            $trim = trim($splitTime[1], '0');
+            $trim = rtrim($splitTime[1], '0');
 
             // note: date timezone set for influxdb
             date_default_timezone_set("utc");
